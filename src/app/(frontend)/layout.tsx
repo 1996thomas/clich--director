@@ -4,6 +4,23 @@ import ParallaxBackground from "../components/ParallaxBackground";
 import PageTransition from "../components/PageTransition";
 import ClientLayoutWrapper from "../components/ClientLayoutWrapper";
 
+export const metadata = {
+  title: "Cliché Director",
+  description: "Portfolio",
+  openGraph: {
+    title: "Cliché Director",
+    description: "Portfolio",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Logo de Cliché Director",
+      },
+    ],
+  },
+};
+
 export default function FrontendLayout({
   children,
 }: Readonly<{
