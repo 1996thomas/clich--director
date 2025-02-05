@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
@@ -26,40 +27,21 @@ export default function GifLoaderWithPercentage() {
   const [progress, setProgress] = useState(0);
   const [frameIndex, setFrameIndex] = useState(0);
   const [isFinalPhase, setIsFinalPhase] = useState(false);
-  // Ces états vont servir à appliquer des transitions (fade out)
+  // États pour gérer les transitions (fade)
   const [showPercentage, setShowPercentage] = useState(true);
   const [showProgressBar, setShowProgressBar] = useState(true);
-  // Pour le logo, on gère son opacité (fade in puis fade out)
   const [logoVisible, setLogoVisible] = useState(false);
   const router = useRouter();
 
+  // Gestion de la progression
   useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-    let hideTimeout: NodeJS.Timeout;
-    let logoFadeTimeout: NodeJS.Timeout;
-    let redirectTimeout: NodeJS.Timeout;
-
-    progressInterval = setInterval(() => {
+    const progressInterval: NodeJS.Timeout = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
           clearInterval(progressInterval);
-          // On lance la phase finale
+          // Lancement de la phase finale
           setIsFinalPhase(true);
-          // On affiche le logo (fade in)
           setLogoVisible(true);
-          // Après 500ms, on fait disparaître le % et la barre (fade out)
-          hideTimeout = setTimeout(() => {
-            setShowPercentage(false);
-            setShowProgressBar(false);
-          }, 500);
-          // Après 2000ms, on fade out le logo
-          logoFadeTimeout = setTimeout(() => {
-            setLogoVisible(false);
-          }, 1200);
-          // On redirige après 3000ms (donc une fois les transitions terminées)
-          redirectTimeout = setTimeout(() => {
-            router.push("/films");
-          }, 2000);
           return 100;
         }
         return prevProgress + 1;
@@ -68,15 +50,38 @@ export default function GifLoaderWithPercentage() {
 
     return () => {
       clearInterval(progressInterval);
+    };
+  }, [router]);
+
+  // Une fois en phase finale, on déclenche les timeouts pour faire disparaître le % et la barre,
+  // puis on fait fade out le logo et on redirige.
+  useEffect(() => {
+    if (!isFinalPhase) return;
+
+    const hideTimeout: NodeJS.Timeout = setTimeout(() => {
+      setShowPercentage(false);
+      setShowProgressBar(false);
+    }, 500);
+
+    const logoFadeTimeout: NodeJS.Timeout = setTimeout(() => {
+      setLogoVisible(false);
+    }, 1200);
+
+    const redirectTimeout: NodeJS.Timeout = setTimeout(() => {
+      router.push("/films");
+    }, 2000);
+
+    return () => {
       clearTimeout(hideTimeout);
       clearTimeout(logoFadeTimeout);
       clearTimeout(redirectTimeout);
     };
-  }, [router]);
+  }, [isFinalPhase, router]);
 
+  // Animation des frames tant que l'on n'est pas en phase finale
   useEffect(() => {
     if (isFinalPhase) return;
-    const frameInterval = setInterval(() => {
+    const frameInterval: NodeJS.Timeout = setInterval(() => {
       setFrameIndex((prevIndex) => (prevIndex + 1) % frames.length);
     }, 80);
     return () => clearInterval(frameInterval);
@@ -84,7 +89,6 @@ export default function GifLoaderWithPercentage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen relative">
-      {/* Affichage du pourcentage */}
       <div
         className={`mb-5 text-6xl font-black absolute bottom-[1vw] right-[2vw] transition-opacity duration-500 ${
           showPercentage ? "opacity-100" : "opacity-0"
@@ -92,8 +96,10 @@ export default function GifLoaderWithPercentage() {
       >
         {progress}%
       </div>
-      <img
+      <Image
         src={isFinalPhase ? "/logo.png" : frames[frameIndex]}
+        width={400}
+        height={400}
         alt={isFinalPhase ? "Logo" : `Frame ${frameIndex + 1}`}
         className={`object-contain h-[20vh] w-auto transition-opacity duration-500 ${
           isFinalPhase
