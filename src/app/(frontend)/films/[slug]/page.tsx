@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Params }) {
       <div className="aspect-video">
         {film.video ? <VideoPlayer videoUrl={film.video} /> : "null"}
       </div>
-      <h1 className="md:text-6xl md:text-left text-3xl text-center font-bold text-balance py-5">
+      <h1 className="md:text-6xl md:text-left text-3xl text-center font-bold py-5 flex justify-center">
         {film?.fullName?.toUpperCase()}
       </h1>
       {film.credit &&

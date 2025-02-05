@@ -31,7 +31,7 @@ export default function FrontendLayout({
       <PageTransition />
       <ClientLayoutWrapper>
         <ParallaxBackground />
-        <div className="px-4 xl:px-40 md:px-20 pb-20">
+        <div className="px-4 xl:px-20 md:px-20 pb-20">
           <Navbar />
           {children}
           <SanityLive />

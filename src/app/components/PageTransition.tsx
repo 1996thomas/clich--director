@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import Image from "next/image";
 
 export default function PageTransition() {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ export default function PageTransition() {
     // Déclenche l'animation uniquement si le chemin a changé
     if (previousPathname.current !== pathname) {
       const timeline = gsap.timeline({
-        defaults: { duration: .8, ease: "power1.inOut" },
+        defaults: { duration: .8, ease: "expo.inOut" },
       });
       timeline
         // Animation d'entrée : l'overlay descend pour couvrir la page
@@ -33,6 +34,6 @@ export default function PageTransition() {
     <div
       ref={overlayRef}
       className="fixed top-0 left-0 w-full h-full bg-black z-50 pointer-events-none translate-y-[-100%]"
-    />
+    ><Image className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]" src={"/logo.png"} alt="" height={300} width={300}/></div>
   );
 }

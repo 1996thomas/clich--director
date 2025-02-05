@@ -23,9 +23,13 @@ export default function FilmGrid({
         <ul className="flex">
           <li
             key="see-all"
-            onClick={() => setSelectedTag(null)}
+            onClick={() => {
+              if (selectedTag) setSelectedTag(null);
+            }}
+            // On ajoute la classe "invisible" quand aucun filtre n'est appliqué.
+            // Ainsi, l'espace est réservé mais le texte n'est pas affiché.
             className={`cursor-pointer p-2 rounded transition-colors duration-200 text-sm ${
-              selectedTag === null ? "underline" : ""
+              selectedTag ? "text-yellow-400" : "invisible"
             }`}
           >
             ALL
@@ -34,7 +38,7 @@ export default function FilmGrid({
             <li
               key={tag._id}
               onClick={() => setSelectedTag(tag._id)}
-              className={`cursor-pointer p-2 rounded transition-colors duration-200 text-sm whitespace-nowrap  ${
+              className={`cursor-pointer p-2 rounded transition-colors duration-200 text-sm whitespace-nowrap ${
                 selectedTag === tag._id ? "underline" : ""
               }`}
             >
