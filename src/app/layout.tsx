@@ -1,5 +1,10 @@
 import "@/app/globals.css";
-import ParallaxBackground from "./components/ParallaxBackground";
+import { Kanit } from "next/font/google";
+
+const kanit = Kanit({
+  subsets: ["latin"],
+  weight: ["400", "700"], // vous pouvez préciser les poids souhaités
+});
 
 export default function RootLayout({
   children,
@@ -8,10 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <ParallaxBackground />
-        {children}
-      </body>
+      <body className={kanit.className}>{children}</body>
     </html>
   );
 }

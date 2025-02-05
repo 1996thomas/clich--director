@@ -19,7 +19,6 @@ export default function FilmGrid({
 
   return (
     <>
-      {/* Liste des tags */}
       <div className="mb-5 flex justify-center">
         <ul className="flex">
           <li

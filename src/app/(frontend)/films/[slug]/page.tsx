@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Params }) {
         {film.video ? <VideoPlayer videoUrl={film.video} /> : "null"}
       </div>
       <h1 className="md:text-6xl md:text-left text-3xl text-center font-bold text-balance py-5">
-        {film?.fullName}
+        {film?.fullName?.toUpperCase()}
       </h1>
       {film.credit &&
         film.credit?.map((i, key) => (
