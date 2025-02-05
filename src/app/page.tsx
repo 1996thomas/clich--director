@@ -90,7 +90,7 @@ export default function GifLoaderWithPercentage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen relative">
       <div
-        className={`mb-5 text-6xl font-black absolute bottom-[1vw] right-[2vw] transition-opacity duration-500 ${
+        className={`mb-5 text-6xl font-black fixed bottom-[1vw] right-[2vw] transition-opacity duration-500 ${
           showPercentage ? "opacity-100" : "opacity-0"
         }`}
       >
