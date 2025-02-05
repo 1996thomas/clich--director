@@ -6,6 +6,22 @@ const kanit = Kanit({
   weight: ["400", "700"], // vous pouvez préciser les poids souhaités
 });
 
+export const metadata = {
+  title: "Cliché Director",
+  description: "Portfolio",
+  openGraph: {
+    title: "Cliché Director",
+    description: "Portfolio",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Logo de Cliché Director",
+      },
+    ],
+  },
+};
 export default function RootLayout({
   children,
 }: Readonly<{
