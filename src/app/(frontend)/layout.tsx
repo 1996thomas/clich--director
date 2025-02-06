@@ -3,6 +3,7 @@ import Navbar from "../components/Nav/Navbar";
 import ParallaxBackground from "../components/ParallaxBackground";
 import PageTransition from "../components/PageTransition";
 import ClientLayoutWrapper from "../components/ClientLayoutWrapper";
+import { GyroPermissionProvider } from "../components/GyroContext";
 
 export const metadata = {
   title: "Cliché Director",
@@ -28,15 +29,17 @@ export default function FrontendLayout({
 }>) {
   return (
     <>
-      <PageTransition />
-      <ClientLayoutWrapper>
-        <ParallaxBackground />
-        <div className="px-4 xl:px-20 md:px-20 pb-20">
-          <Navbar />
-          {children}
-          <SanityLive />
-        </div>
-      </ClientLayoutWrapper>
+      <GyroPermissionProvider>
+        <PageTransition />
+        <ClientLayoutWrapper>
+          <ParallaxBackground />
+          <div className="px-4 xl:px-20 md:px-20 pb-20">
+            <Navbar />
+            {children}
+            <SanityLive />
+          </div>
+        </ClientLayoutWrapper>
+      </GyroPermissionProvider>
     </>
   );
 }

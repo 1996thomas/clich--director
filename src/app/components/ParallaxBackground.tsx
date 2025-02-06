@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useGyroPermission } from "./GyroContext";
 
 function useIsMobile(breakpoint = 768) {
   const [isMobile, setIsMobile] = useState(false);
@@ -266,9 +267,8 @@ export default function ParallaxBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile(); // Détecte si l'écran est mobile
   const imagesData = isMobile ? mobileImagesData : desktopImagesData;
-
   const [brightnessValues, setBrightnessValues] = useState<number[]>([]);
-  const [permissionGranted, setPermissionGranted] = useState(false); // Pour la permission de DeviceOrientation
+  const { permissionGranted, requestPermission } = useGyroPermission();
 
   // Génération aléatoire des valeurs de luminosité pour chaque image
   useEffect(() => {
@@ -319,11 +319,13 @@ export default function ParallaxBackground() {
   // Référence pour mémoriser les offsets précédents pour une interpolation fluide
   const prevOffsets = useRef({ x: 0, y: 0 });
 
+  // Fonction gérant l'orientation pour le parallaxe sur mobile
   const handleOrientation = (event: DeviceOrientationEvent) => {
     const alpha = event.alpha ?? 0; // Rotation autour de l'axe z (0 à 360°)
     const beta = event.beta ?? 0; // Inclinaison avant/arrière (axe X)
     const gamma = event.gamma ?? 0; // Inclinaison gauche/droite (axe Y)
 
+    // Conversion en radians
     const radAlpha = alpha * (Math.PI / 180);
     const radBeta = beta * (Math.PI / 180);
     const radGamma = gamma * (Math.PI / 180);
@@ -332,6 +334,7 @@ export default function ParallaxBackground() {
     const targetX = Math.sin(radGamma + radAlpha * 0.1) * 50;
     const targetY = Math.sin(radBeta + radAlpha * 0.1) * 50;
 
+    // Interpolation (lerp) pour adoucir la transition
     const smoothing = 0.1;
     prevOffsets.current.x += (targetX - prevOffsets.current.x) * smoothing;
     prevOffsets.current.y += (targetY - prevOffsets.current.y) * smoothing;
@@ -360,30 +363,6 @@ export default function ParallaxBackground() {
       window.removeEventListener("deviceorientation", handleOrientation);
   }, [isMobile, permissionGranted]);
 
-  // Fonction pour demander la permission d'accéder aux capteurs sur iOS
-  const requestDeviceOrientationPermission = () => {
-    if (
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof (DeviceOrientationEvent as any).requestPermission === "function"
-    ) {
-      (DeviceOrientationEvent as any)
-        .requestPermission()
-        .then((response: string) => {
-          if (response === "granted") {
-            setPermissionGranted(true);
-          } else {
-            console.log("Permission refusée pour l'orientation");
-          }
-        })
-        .catch((err: any) => {
-          console.error("Erreur lors de la demande de permission :", err);
-        });
-    } else {
-      // Si la méthode n'existe pas, on considère que la permission est accordée
-      setPermissionGranted(true);
-    }
-  };
-
   return (
     <>
       <div
@@ -408,12 +387,10 @@ export default function ParallaxBackground() {
           />
         ))}
       </div>
-
-      {/* Bouton pour demander la permission sur mobile */}
       {isMobile && !permissionGranted && (
         <div
           className="z-40 fixed h-screen w-screen top-0 left-0"
-          onClick={requestDeviceOrientationPermission}
+          onClick={requestPermission}
         ></div>
       )}
     </>
