@@ -268,19 +268,24 @@ export default function ParallaxBackground() {
   const imagesData = isMobile ? mobileImagesData : desktopImagesData;
 
   const [brightnessValues, setBrightnessValues] = useState<number[]>([]);
+  const [permissionGranted, setPermissionGranted] = useState(false); // Pour la permission de DeviceOrientation
+
+  // Génération aléatoire des valeurs de luminosité pour chaque image
   useEffect(() => {
     setBrightnessValues(
       imagesData.map(() => Math.random() * (0.7 - 0.4) + 0.4)
     );
   }, [imagesData.length]);
 
-  // Gestion du parallaxe sur desktop avec la souris
+  // Parallaxe sur desktop avec la souris
   useEffect(() => {
+    if (isMobile) return; // On n'applique pas cet effet sur mobile
     const container = containerRef.current;
     if (!container) return;
     const elements = container.querySelectorAll<HTMLElement>(".bg-image");
 
-    elements.forEach((el: HTMLElement, i: number) => {
+    // Animation de rotation en boucle pour chaque image
+    elements.forEach((el, i) => {
       gsap.to(el, {
         rotation: i % 2 === 0 ? -1 : 1,
         duration: i % 2 === 0 ? 0.3 : 0.2,
@@ -291,11 +296,12 @@ export default function ParallaxBackground() {
       });
     });
 
+    // Gestion du mouvement de la souris pour le parallaxe
     const handleMouseMove = (event: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const mouseX = event.clientX - innerWidth / 2;
       const mouseY = event.clientY - innerHeight / 2;
-      elements.forEach((el: HTMLElement) => {
+      elements.forEach((el) => {
         const depth = parseFloat(el.getAttribute("data-depth") || "1");
         gsap.to(el, {
           x: mouseX * depth * 0.05,
@@ -306,52 +312,56 @@ export default function ParallaxBackground() {
       });
     };
 
-    if (!isMobile) {
-      window.addEventListener("mousemove", handleMouseMove);
-      return () => window.removeEventListener("mousemove", handleMouseMove);
-    }
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
 
-  // Gestion du parallaxe via gyroscope en mobile en intégrant alpha pour un effet 3D
+  // Référence pour mémoriser les offsets précédents pour une interpolation fluide
   const prevOffsets = useRef({ x: 0, y: 0 });
-  useEffect(() => {
-    if (!isMobile) return;
+
+  const handleOrientation = (event: DeviceOrientationEvent) => {
+    const alpha = event.alpha ?? 0; // Rotation autour de l'axe z (0 à 360°)
+    const beta = event.beta ?? 0; // Inclinaison avant/arrière (axe X)
+    const gamma = event.gamma ?? 0; // Inclinaison gauche/droite (axe Y)
+
+    const radAlpha = alpha * (Math.PI / 180);
+    const radBeta = beta * (Math.PI / 180);
+    const radGamma = gamma * (Math.PI / 180);
+
+    // Calcul des offsets cibles en utilisant une fonction sin pour lisser
+    const targetX = Math.sin(radGamma + radAlpha * 0.1) * 50;
+    const targetY = Math.sin(radBeta + radAlpha * 0.1) * 50;
+
+    const smoothing = 0.1;
+    prevOffsets.current.x += (targetX - prevOffsets.current.x) * smoothing;
+    prevOffsets.current.y += (targetY - prevOffsets.current.y) * smoothing;
+
     const container = containerRef.current;
     if (!container) return;
     const elements = container.querySelectorAll<HTMLElement>(".bg-image");
 
-    const handleOrientation = (event: DeviceOrientationEvent) => {
-      const alpha = event.alpha ?? 0; // Rotation autour de l'axe z (0 à 360°)
-      const beta = event.beta ?? 0; // Inclinaison avant/arrière (axe X)
-      const gamma = event.gamma ?? 0; // Inclinaison gauche/droite (axe Y)
-
-      // Convertir en radians
-      const radAlpha = alpha * (Math.PI / 180);
-      const radBeta = beta * (Math.PI / 180);
-      const radGamma = gamma * (Math.PI / 180);
-
-      // Calcul des offsets cibles en utilisant sin pour lisser
-      // On utilise alpha avec un coefficient pour ajouter une rotation légère
-      const targetX = Math.sin(radGamma + radAlpha * 0.1) * 50;
-      const targetY = Math.sin(radBeta + radAlpha * 0.1) * 50;
-
-      // Appliquer une interpolation (lerp) pour lisser les transitions
-      const smoothing = 0.1; // valeur entre 0 et 1
-      prevOffsets.current.x += (targetX - prevOffsets.current.x) * smoothing;
-      prevOffsets.current.y += (targetY - prevOffsets.current.y) * smoothing;
-
-      elements.forEach((el: HTMLElement) => {
-        const depth = parseFloat(el.getAttribute("data-depth") || "1");
-        gsap.to(el, {
-          x: prevOffsets.current.x * depth,
-          y: prevOffsets.current.y * depth,
-          duration: 0.5,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
+    elements.forEach((el) => {
+      const depth = parseFloat(el.getAttribute("data-depth") || "1");
+      gsap.to(el, {
+        x: prevOffsets.current.x * depth,
+        y: prevOffsets.current.y * depth,
+        duration: 0.5,
+        ease: "power2.out",
+        overwrite: "auto",
       });
-    };
+    });
+  };
 
+  // Ajout de l'écouteur pour le gyroscope uniquement sur mobile et après avoir obtenu la permission
+  useEffect(() => {
+    if (!isMobile || !permissionGranted) return;
+    window.addEventListener("deviceorientation", handleOrientation);
+    return () =>
+      window.removeEventListener("deviceorientation", handleOrientation);
+  }, [isMobile, permissionGranted]);
+
+  // Fonction pour demander la permission d'accéder aux capteurs sur iOS
+  const requestDeviceOrientationPermission = () => {
     if (
       typeof DeviceOrientationEvent !== "undefined" &&
       typeof (DeviceOrientationEvent as any).requestPermission === "function"
@@ -360,40 +370,52 @@ export default function ParallaxBackground() {
         .requestPermission()
         .then((response: string) => {
           if (response === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation);
+            setPermissionGranted(true);
+          } else {
+            console.log("Permission refusée pour l'orientation");
           }
         })
-        .catch(console.error);
+        .catch((err: any) => {
+          console.error("Erreur lors de la demande de permission :", err);
+        });
     } else {
-      window.addEventListener("deviceorientation", handleOrientation);
+      // Si la méthode n'existe pas, on considère que la permission est accordée
+      setPermissionGranted(true);
     }
-
-    return () =>
-      window.removeEventListener("deviceorientation", handleOrientation);
-  }, [isMobile]);
+  };
 
   return (
-    <div
-      ref={containerRef}
-      className="fixed inset-0 pointer-events-none z-[-1]"
-    >
-      {imagesData.map((img, index) => (
-        <Image
-          key={index}
-          src={img.src}
-          width={img.width}
-          height={img.width}
-          alt="Drawing used for Background"
-          className="bg-image absolute"
-          style={{
-            top: img.top,
-            left: img.left,
-            width: `clamp(80px, ${img.width}vw, 300px)`,
-            filter: `brightness(${brightnessValues[index] ?? 0.5})`,
-          }}
-          data-depth={img.depth}
-        />
-      ))}
-    </div>
+    <>
+      <div
+        ref={containerRef}
+        className="fixed inset-0 pointer-events-none z-[-1]"
+      >
+        {imagesData.map((img, index) => (
+          <Image
+            key={index}
+            src={img.src}
+            width={img.width}
+            height={img.width}
+            alt="Drawing used for Background"
+            className="bg-image absolute"
+            style={{
+              top: img.top,
+              left: img.left,
+              width: `clamp(80px, ${img.width}vw, 300px)`,
+              filter: `brightness(${brightnessValues[index] ?? 0.5})`,
+            }}
+            data-depth={img.depth}
+          />
+        ))}
+      </div>
+
+      {/* Bouton pour demander la permission sur mobile */}
+      {isMobile && !permissionGranted && (
+        <div
+          className="z-40 fixed h-screen w-screen top-0 left-0"
+          onClick={requestDeviceOrientationPermission}
+        ></div>
+      )}
+    </>
   );
 }
