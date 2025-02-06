@@ -26,8 +26,6 @@ export default function FilmGrid({
             onClick={() => {
               if (selectedTag) setSelectedTag(null);
             }}
-            // On ajoute la classe "invisible" quand aucun filtre n'est appliqué.
-            // Ainsi, l'espace est réservé mais le texte n'est pas affiché.
             className={`cursor-pointer p-2 rounded transition-colors duration-200 text-sm ${
               selectedTag ? "text-yellow-400" : "invisible"
             }`}

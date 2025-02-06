@@ -5,7 +5,6 @@ import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
 
 export default function FilmCard({ film }: { film: Film }) {
-  console.log(film);
   return (
     <Link href={`/films/${film.slug?.current}`} className="flex flex-col">
       {film?.image ? (

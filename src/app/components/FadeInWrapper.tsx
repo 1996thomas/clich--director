@@ -8,10 +8,9 @@ export default function FadeInWrapper({ children }: { children: ReactNode }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Démarrer le fade in dès le montage du composant
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 0); // ajustez le délai si nécessaire
+    }, 0); 
 
     return () => clearTimeout(timer);
   }, []);

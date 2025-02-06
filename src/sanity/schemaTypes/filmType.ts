@@ -29,11 +29,28 @@ export const film = defineType({
       title: "Image du projet",
       validation: (e) => e.required(),
     }),
-
     defineField({
-      type: "url",
+      type: "object",
       name: "video",
-      title: "Vidéo du projet",
+      title: "Video du projet",
+      fields: [
+        defineField({
+          name: "url",
+          title: "URL de la video",
+          type: "url",
+        }),
+        defineField({
+          name: "provider",
+          type: "string",
+          title: "Provider de la video",
+          options: {
+            list: [
+              { title: "Youtube", value: "youtube" },
+              { title: "Vimeo", value: "vimeo" },
+            ],
+          },
+        }),
+      ],
     }),
     defineField({
       type: "array",

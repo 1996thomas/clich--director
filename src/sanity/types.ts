@@ -108,7 +108,10 @@ export type Film = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  video?: string;
+  video?: {
+    url?: string;
+    provider?: "youtube" | "vimeo";
+  };
   credit?: Array<string>;
   Carousel?: Array<{
     asset?: {
@@ -236,7 +239,10 @@ export type FILMS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: "image";
   };
-  video?: string;
+  video?: {
+    url?: string;
+    provider?: "vimeo" | "youtube";
+  };
   credit?: Array<string>;
   Carousel?: Array<{
     asset?: {
@@ -279,7 +285,10 @@ export type FILM_QUERYResult = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  video?: string;
+  video?: {
+    url?: string;
+    provider?: "vimeo" | "youtube";
+  };
   credit?: Array<string>;
   Carousel?: Array<{
     asset?: {
@@ -307,8 +316,8 @@ export type TAGS_QUERYResult = Array<{
   title: string | null;
 }>;
 // Variable: PHOTO_QUERY
-// Query: *[_type == "photography"]
-export type PHOTO_QUERYResult = Array<{
+// Query: *[_type == "photography"][0]
+export type PHOTO_QUERYResult = {
   _id: string;
   _type: "photography";
   _createdAt: string;
@@ -326,7 +335,7 @@ export type PHOTO_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
-}>;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
@@ -335,6 +344,6 @@ declare module "@sanity/client" {
     "*[_type == \"film\"]": FILMS_QUERYResult;
     "*[_type == \"film\" && slug.current == $slug][0]": FILM_QUERYResult;
     "*[_type == \"tag\"]{\n    _id,\n    title\n  }": TAGS_QUERYResult;
-    "*[_type == \"photography\"]": PHOTO_QUERYResult;
+    "*[_type == \"photography\"][0]": PHOTO_QUERYResult;
   }
 }

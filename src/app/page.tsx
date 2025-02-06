@@ -33,7 +33,6 @@ export default function GifLoaderWithPercentage() {
   const [logoVisible, setLogoVisible] = useState(false);
   const router = useRouter();
 
-  // Gestion de la progression
   useEffect(() => {
     const progressInterval: NodeJS.Timeout = setInterval(() => {
       setProgress((prevProgress) => {
@@ -46,15 +45,13 @@ export default function GifLoaderWithPercentage() {
         }
         return prevProgress + 1;
       });
-    }, 40);
+    }, 25);
 
     return () => {
       clearInterval(progressInterval);
     };
   }, [router]);
 
-  // Une fois en phase finale, on déclenche les timeouts pour faire disparaître le % et la barre,
-  // puis on fait fade out le logo et on redirige.
   useEffect(() => {
     if (!isFinalPhase) return;
 
@@ -65,11 +62,11 @@ export default function GifLoaderWithPercentage() {
 
     const logoFadeTimeout: NodeJS.Timeout = setTimeout(() => {
       setLogoVisible(false);
-    }, 1200);
+    }, 800);
 
     const redirectTimeout: NodeJS.Timeout = setTimeout(() => {
       router.push("/films");
-    }, 2000);
+    }, 1500);
 
     return () => {
       clearTimeout(hideTimeout);
@@ -78,7 +75,6 @@ export default function GifLoaderWithPercentage() {
     };
   }, [isFinalPhase, router]);
 
-  // Animation des frames tant que l'on n'est pas en phase finale
   useEffect(() => {
     if (isFinalPhase) return;
     const frameInterval: NodeJS.Timeout = setInterval(() => {

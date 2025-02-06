@@ -560,7 +560,33 @@
       "video": {
         "type": "objectAttribute",
         "value": {
-          "type": "string"
+          "type": "object",
+          "attributes": {
+            "url": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "provider": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "union",
+                "of": [
+                  {
+                    "type": "string",
+                    "value": "youtube"
+                  },
+                  {
+                    "type": "string",
+                    "value": "vimeo"
+                  }
+                ]
+              },
+              "optional": true
+            }
+          }
         },
         "optional": true
       },

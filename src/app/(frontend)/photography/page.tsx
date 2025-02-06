@@ -5,10 +5,9 @@ import React from "react";
 
 export default async function page() {
   const { data: photos } = await sanityFetch({ query: PHOTO_QUERY });
-console.log(photos)
   return (
     <div>
-      <PhotoGrid photography={photos} />
+      {photos ? <PhotoGrid photography={photos} /> : <p>No photos available</p>}
     </div>
   );
 }
