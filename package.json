@@ -12,6 +12,7 @@
   "dependencies": {
     "@portabletext/react": "^3.2.0",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/orderable-document-list": "^1.2.2",
     "@sanity/vision": "^3.72.1",
     "@vidstack/react": "^1.12.12",
     "gsap": "^3.12.7",
@@ -23,7 +24,8 @@
     "sanity": "^3.72.1",
     "sanity-plugin-media": "^2.3.2",
     "sanity-plugin-singleton-tools": "^1.1.0",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "swiper": "^11.2.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

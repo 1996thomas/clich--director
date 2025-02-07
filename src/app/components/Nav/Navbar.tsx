@@ -5,7 +5,7 @@ import React from "react";
 export default function Navbar() {
   return (
     <nav>
-      <div className="flex justify-between py-5">
+      <div className="flex justify-between items-end py-5">
         <Link href={"/"}>
           <Image
             src={"/logo.png"}

@@ -1,10 +1,17 @@
+import {
+  orderRankField,
+  orderRankOrdering,
+} from "@sanity/orderable-document-list";
 import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const film = defineType({
   type: "document",
   name: "film",
   title: "Film",
+  orderings: [orderRankOrdering],
+
   fields: [
+    orderRankField({ type: "film", newItemPosition: "before" }),
     defineField({
       type: "string",
       name: "title",
@@ -21,7 +28,7 @@ export const film = defineType({
       name: "slug",
       title: "Lien du projet",
       validation: (e) => e.required(),
-      options: { source: "title" },
+      options: { source: "fullName" },
     }),
     defineField({
       type: "image",

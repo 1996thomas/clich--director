@@ -34,6 +34,6 @@ export default function PageTransition() {
     <div
       ref={overlayRef}
       className="fixed top-0 left-0 w-full h-full bg-black z-50 pointer-events-none translate-y-[-100%]"
-    ><Image className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]" src={"/logo.png"} alt="" height={300} width={300}/></div>
+    ><Image className="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]" src={"/logo-w.svg"} alt="" height={300} width={300}/></div>
   );
 }

@@ -14,17 +14,20 @@ import { schema } from "./src/sanity/schemaTypes";
 import { structure } from "./src/sanity/structure";
 import { media } from "sanity-plugin-media";
 import { singletonTools } from "sanity-plugin-singleton-tools";
+import {
+  orderRankField,
+  orderRankOrdering,
+} from "@sanity/orderable-document-list";
 
 export default defineConfig({
   basePath: "/studio",
   projectId,
   dataset,
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
-  schema,
   plugins: [
     structureTool({ structure }),
     media(),
     singletonTools(),
     visionTool({ defaultApiVersion: apiVersion }),
   ],
+  schema,
 });

@@ -1,6 +1,6 @@
 import { defineQuery } from "next-sanity";
 
-export const FILMS_QUERY = defineQuery(`*[_type == "film"]`);
+export const FILMS_QUERY = defineQuery(`*[_type == "film"] | order(orderRank)`);
 
 export const FILM_QUERY = defineQuery(
   `*[_type == "film" && slug.current == $slug][0]`

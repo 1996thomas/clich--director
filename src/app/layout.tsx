@@ -14,7 +14,7 @@ export const metadata = {
     description: "Portfolio",
     images: [
       {
-        url: "/logo.png",
+        url: "/logo.svg",
         width: 1200,
         height: 630,
         alt: "Logo de Cliché Director",
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body className={kanit.className}>{children}</body>
     </html>
   );

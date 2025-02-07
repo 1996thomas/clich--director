@@ -58,7 +58,7 @@ export default function GifLoaderWithPercentage() {
     const hideTimeout: NodeJS.Timeout = setTimeout(() => {
       setShowPercentage(false);
       setShowProgressBar(false);
-    }, 500);
+    }, 300);
 
     const logoFadeTimeout: NodeJS.Timeout = setTimeout(() => {
       setLogoVisible(false);
@@ -66,7 +66,7 @@ export default function GifLoaderWithPercentage() {
 
     const redirectTimeout: NodeJS.Timeout = setTimeout(() => {
       router.push("/films");
-    }, 1500);
+    }, 1600);
 
     return () => {
       clearTimeout(hideTimeout);
@@ -93,7 +93,7 @@ export default function GifLoaderWithPercentage() {
         {progress}%
       </div>
       <Image
-        src={isFinalPhase ? "/logo.png" : frames[frameIndex]}
+        src={isFinalPhase ? "/logo-w.svg" : frames[frameIndex]}
         width={400}
         height={400}
         alt={isFinalPhase ? "Logo" : `Frame ${frameIndex + 1}`}

@@ -8,6 +8,11 @@ export const photography = defineType({
   options: { singleton: true },
   fields: [
     defineField({
+      name: "name",
+      title: "Name",
+      type: "string",
+    }),
+    defineField({
       type: "array",
       name: "images",
       title: "Images",

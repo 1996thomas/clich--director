@@ -1,20 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "@vidstack/react/player/styles/base.css";
 import { MediaPlayer, MediaProvider } from "@vidstack/react";
-
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
-  return isMobile;
-}
+import { useIsMobile } from "./useIsMobile";
 
 export default function VideoPlayer({
   videoUrl,

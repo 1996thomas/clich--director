@@ -1,3 +1,4 @@
+import Carousel from "@/app/components/Carousel";
 import VideoPlayer from "@/app/components/VideoPlayer";
 import { sanityFetch } from "@/sanity/lib/live";
 import { FILM_QUERY } from "@/sanity/lib/queries";
@@ -45,6 +46,7 @@ export default async function Page({ params }: { params: Params }) {
             {i}
           </p>
         ))}
+      {film.Carousel && <Carousel images={film.Carousel}/>}
     </main>
   );
 }

@@ -3,19 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import { useGyroPermission } from "./GyroContext";
+import { useIsMobile } from "./useIsMobile";
 
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
-  return isMobile;
-}
 
 const desktopImagesData = [
   {
@@ -186,8 +175,8 @@ const mobileImagesData = [
   },
   {
     src: "/loader/white/7w.svg",
-    top: "4%",
-    left: "4%",
+    top: "44%",
+    left: "34%",
     width: 20,
     depth: 0.8,
   },
@@ -214,15 +203,15 @@ const mobileImagesData = [
   },
   {
     src: "/loader/white/11w.svg",
-    top: "2%",
-    left: "45%",
+    top: "55%",
+    left: "47%",
     width: 16,
     depth: -0.6,
   },
   {
     src: "/loader/white/12w.svg",
-    top: "8%",
-    left: "15%",
+    top: "10%",
+    left: "12%",
     width: 16,
     depth: 0.5,
   },
