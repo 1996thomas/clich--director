@@ -8,7 +8,7 @@ export const tag = defineType({
     defineField({
       type: "string",
       name: "title",
-      title: "",
+      title: "Nom du tag",
       validation: (e) => e.required(),
     }),
   ],

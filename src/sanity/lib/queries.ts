@@ -12,3 +12,5 @@ export const TAGS_QUERY = defineQuery(`*[_type == "tag"]{
   }`);
 
 export const PHOTO_QUERY = defineQuery(`*[_type == "photography"][0]`);
+
+export const SETTING_QUERY = defineQuery(`*[_type == "setting"][0]`);

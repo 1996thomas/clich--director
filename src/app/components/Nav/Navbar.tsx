@@ -16,10 +16,14 @@ export default function Navbar() {
         </Link>
         <ul className="flex space-x-4 md:space-x-8">
           <li>
-            <Link href="/films">Film</Link>
+            <Link href="/films" prefetch={true} scroll={false}>
+              Film
+            </Link>
           </li>
           <li>
-            <Link href="/photography">Photography</Link>
+            <Link href="/photography" prefetch={true} scroll={false}>
+              Photography
+            </Link>
           </li>
           <li>
             <Link href="/about">About</Link>

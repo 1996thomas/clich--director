@@ -14,4 +14,5 @@ export const structure: StructureResolver = (S, context) =>
         createIntent: true,
       }),
       S.documentTypeListItem("photography").title("Photos"),
+      S.documentTypeListItem("setting").title("Settings"),
     ]);

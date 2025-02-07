@@ -68,12 +68,49 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Setting = {
+  _id: string;
+  _type: "setting";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  about?: string;
+  photo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  socials?: Array<{
+    social_logo?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    social_url?: string;
+    _key: string;
+  }>;
+};
+
 export type Photography = {
   _id: string;
   _type: "photography";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  name?: string;
   images?: Array<{
     asset?: {
       _ref: string;
@@ -94,6 +131,7 @@ export type Film = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  orderRank?: string;
   title?: string;
   fullName?: string;
   slug?: Slug;
@@ -214,17 +252,18 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Photography | Film | Tag | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Setting | Photography | Film | Tag | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: FILMS_QUERY
-// Query: *[_type == "film"]
+// Query: *[_type == "film"] | order(orderRank)
 export type FILMS_QUERYResult = Array<{
   _id: string;
   _type: "film";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  orderRank?: string;
   title?: string;
   fullName?: string;
   slug?: Slug;
@@ -271,6 +310,7 @@ export type FILM_QUERYResult = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  orderRank?: string;
   title?: string;
   fullName?: string;
   slug?: Slug;
@@ -323,6 +363,7 @@ export type PHOTO_QUERYResult = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  name?: string;
   images?: Array<{
     asset?: {
       _ref: string;
@@ -336,14 +377,52 @@ export type PHOTO_QUERYResult = {
     _key: string;
   }>;
 } | null;
+// Variable: SETTING_QUERY
+// Query: *[_type == "setting"][0]
+export type SETTING_QUERYResult = {
+  _id: string;
+  _type: "setting";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  about?: string;
+  photo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  socials?: Array<{
+    social_logo?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    social_url?: string;
+    _key: string;
+  }>;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"film\"]": FILMS_QUERYResult;
+    "*[_type == \"film\"] | order(orderRank)": FILMS_QUERYResult;
     "*[_type == \"film\" && slug.current == $slug][0]": FILM_QUERYResult;
     "*[_type == \"tag\"]{\n    _id,\n    title\n  }": TAGS_QUERYResult;
     "*[_type == \"photography\"][0]": PHOTO_QUERYResult;
+    "*[_type == \"setting\"][0]": SETTING_QUERYResult;
   }
 }
