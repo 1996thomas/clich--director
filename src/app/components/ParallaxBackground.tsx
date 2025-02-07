@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useGyroPermission } from "./GyroContext";
 import { useIsMobile } from "./useIsMobile";
 
-
 const desktopImagesData = [
   {
     src: "/loader/white/1w.svg",
@@ -146,7 +145,7 @@ const mobileImagesData = [
   },
   {
     src: "/loader/white/3w.svg",
-    top: "10%",
+    top: "18%",
     left: "80%",
     width: 18,
     depth: -0.6,
@@ -210,7 +209,7 @@ const mobileImagesData = [
   },
   {
     src: "/loader/white/12w.svg",
-    top: "10%",
+    top: "15%",
     left: "12%",
     width: 16,
     depth: 0.5,
@@ -245,7 +244,7 @@ const mobileImagesData = [
   },
   {
     src: "/loader/white/17w.svg",
-    top: "10%",
+    top: "17%",
     left: "45%",
     width: 18,
     depth: 1.0,
@@ -254,26 +253,23 @@ const mobileImagesData = [
 
 export default function ParallaxBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile(); // Détecte si l'écran est mobile
+  const isMobile = useIsMobile(); 
   const imagesData = isMobile ? mobileImagesData : desktopImagesData;
   const [brightnessValues, setBrightnessValues] = useState<number[]>([]);
   const { permissionGranted, requestPermission } = useGyroPermission();
 
-  // Génération aléatoire des valeurs de luminosité pour chaque image
   useEffect(() => {
     setBrightnessValues(
       imagesData.map(() => Math.random() * (0.7 - 0.4) + 0.4)
     );
   }, [imagesData.length]);
 
-  // Parallaxe sur desktop avec la souris
   useEffect(() => {
-    if (isMobile) return; // On n'applique pas cet effet sur mobile
+    if (isMobile) return;
     const container = containerRef.current;
     if (!container) return;
     const elements = container.querySelectorAll<HTMLElement>(".bg-image");
 
-    // Animation de rotation en boucle pour chaque image
     elements.forEach((el, i) => {
       gsap.to(el, {
         rotation: i % 2 === 0 ? -1 : 1,
@@ -285,7 +281,6 @@ export default function ParallaxBackground() {
       });
     });
 
-    // Gestion du mouvement de la souris pour le parallaxe
     const handleMouseMove = (event: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const mouseX = event.clientX - innerWidth / 2;
@@ -305,30 +300,22 @@ export default function ParallaxBackground() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
 
-  // Référence pour mémoriser les offsets précédents pour une interpolation fluide
   const prevOffsets = useRef({ x: 0, y: 0 });
 
-  // Fonction gérant l'orientation pour le parallaxe sur mobile
-  // Ici, nous partons du principe qu'en mode portrait (téléphone tenu droit face à soi)
-  // les valeurs par défaut sont beta = 90 et gamma = 0.
   const handleOrientation = (event: DeviceOrientationEvent) => {
-    const beta  = event.beta  ?? 0;  // Inclinaison avant/arrière
-    const gamma = event.gamma ?? 0;   // Inclinaison gauche/droite
+    const beta = event.beta ?? 0;
+    const gamma = event.gamma ?? 0;
 
-    // Valeurs de référence pour un téléphone tenu droit en portrait
-    const baselineBeta = 90;
+    const baselineBeta = 60;
     const baselineGamma = 0;
 
-    // Calcul de la différence (déviation par rapport à l'état de repos)
-    const deltaBeta = beta - baselineBeta;      // en degrés
-    const deltaGamma = gamma - baselineGamma;     // en degrés
+    const deltaBeta = beta - baselineBeta;
+    const deltaGamma = gamma - baselineGamma;
 
-    // Appliquer un facteur d'échelle (à ajuster selon l'effet désiré)
     const scale = 2;
     const targetX = deltaGamma * scale;
     const targetY = deltaBeta * scale;
 
-    // Interpolation (lerp) pour adoucir la transition
     const smoothing = 0.1;
     prevOffsets.current.x += (targetX - prevOffsets.current.x) * smoothing;
     prevOffsets.current.y += (targetY - prevOffsets.current.y) * smoothing;
@@ -349,7 +336,6 @@ export default function ParallaxBackground() {
     });
   };
 
-  // Ajout de l'écouteur pour le gyroscope uniquement sur mobile et après avoir obtenu la permission
   useEffect(() => {
     if (!isMobile || !permissionGranted) return;
     window.addEventListener("deviceorientation", handleOrientation);
