@@ -309,19 +309,24 @@ export default function ParallaxBackground() {
   const prevOffsets = useRef({ x: 0, y: 0 });
 
   // Fonction gérant l'orientation pour le parallaxe sur mobile
+  // Ici, nous partons du principe qu'en mode portrait (téléphone tenu droit face à soi)
+  // les valeurs par défaut sont beta = 90 et gamma = 0.
   const handleOrientation = (event: DeviceOrientationEvent) => {
-    const alpha = event.alpha ?? 0; // Rotation autour de l'axe z (0 à 360°)
-    const beta = event.beta ?? 0; // Inclinaison avant/arrière (axe X)
-    const gamma = event.gamma ?? 0; // Inclinaison gauche/droite (axe Y)
+    const beta  = event.beta  ?? 0;  // Inclinaison avant/arrière
+    const gamma = event.gamma ?? 0;   // Inclinaison gauche/droite
 
-    // Conversion en radians
-    const radAlpha = alpha * (Math.PI / 180);
-    const radBeta = beta * (Math.PI / 180);
-    const radGamma = gamma * (Math.PI / 180);
+    // Valeurs de référence pour un téléphone tenu droit en portrait
+    const baselineBeta = 90;
+    const baselineGamma = 0;
 
-    // Calcul des offsets cibles en utilisant une fonction sin pour lisser
-    const targetX = Math.sin(radGamma + radAlpha * 0.1) * 50;
-    const targetY = Math.sin(radBeta + radAlpha * 0.1) * 50;
+    // Calcul de la différence (déviation par rapport à l'état de repos)
+    const deltaBeta = beta - baselineBeta;      // en degrés
+    const deltaGamma = gamma - baselineGamma;     // en degrés
+
+    // Appliquer un facteur d'échelle (à ajuster selon l'effet désiré)
+    const scale = 2;
+    const targetX = deltaGamma * scale;
+    const targetY = deltaBeta * scale;
 
     // Interpolation (lerp) pour adoucir la transition
     const smoothing = 0.1;
