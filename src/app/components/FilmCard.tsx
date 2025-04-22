@@ -21,7 +21,7 @@ export default function FilmCard({ film }: { film: Film }) {
           alt=""
         />
       ) : null}{" "}
-      <h2 className="xl:text-xl lg:text-xl font-bold md:text-xl text-2xl text-cente tracking-tight text-center">
+      <h2 className="xl:text-xl lg:text-xl font-semibold md:text-xl text-xl tracking-tight text-center">
         {film.fullName?.toUpperCase()}
       </h2>
     </Link>
