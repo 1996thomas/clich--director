@@ -14,7 +14,7 @@ export default function Navbar() {
             height={100}
           />
         </Link>
-        <ul className="flex space-x-4 md:space-x-8">
+        <ul className="flex gap-4 md:space-x-8 text-lg uppercase font-black">
           <li>
             <Link href="/films" prefetch={true} scroll={false}>
               Film

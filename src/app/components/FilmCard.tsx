@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function FilmCard({ film }: { film: Film }) {
   return (
-    <Link href={`/films/${film.slug?.current}`} className="flex flex-col">
+    <Link href={`/films/${film.slug?.current}`} className="flex flex-col ">
       {film?.image ? (
         <Image
           className="w-auto aspect-video mb-2"
@@ -21,7 +21,7 @@ export default function FilmCard({ film }: { film: Film }) {
           alt=""
         />
       ) : null}{" "}
-      <h2 className="xl:text-2xl lg:text-2xl font-semibold md:text-xl text-2xl text-cente tracking-tight text-center">
+      <h2 className="xl:text-xl lg:text-xl font-bold md:text-xl text-2xl text-cente tracking-tight text-center">
         {film.fullName?.toUpperCase()}
       </h2>
     </Link>

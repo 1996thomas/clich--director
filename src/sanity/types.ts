@@ -76,6 +76,10 @@ export type Setting = {
   _rev: string;
   name?: string;
   about?: string;
+  contact_info?: {
+    contact_tel?: string;
+    contact_email?: string;
+  };
   photo?: {
     asset?: {
       _ref: string;
@@ -387,6 +391,10 @@ export type SETTING_QUERYResult = {
   _rev: string;
   name?: string;
   about?: string;
+  contact_info?: {
+    contact_tel?: string;
+    contact_email?: string;
+  };
   photo?: {
     asset?: {
       _ref: string;

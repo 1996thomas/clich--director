@@ -16,6 +16,23 @@ export const settings = defineType({
       title: "Texte About",
     }),
     defineField({
+      name: "contact_info",
+      type: "object",
+      title: "Contact Information ",
+      fields: [
+        defineField({
+          type: "string",
+          title: "contact tel",
+          name: "contact_tel",
+        }),
+        defineField({
+          type: "string",
+          title: "contact email",
+          name: "contact_email",
+        }),
+      ],
+    }),
+    defineField({
       type: "image",
       title: "Photo",
       name: "photo",
