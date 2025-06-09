@@ -22,11 +22,19 @@ export default function Navbar() {
           </li>
           <li>
             <Link href="/photography" prefetch={true} scroll={false}>
-              Photography
+              Gallery
             </Link>
           </li>
           <li>
             <Link href="/about">About</Link>
+          </li>
+          <li>
+            <Link
+              target="_blank"
+              href="https://www.tiktok.com/@cliche.director?_t=ZN-8wtiuPnSWMo&_r=1"
+            >
+              Socials
+            </Link>
           </li>
         </ul>
       </div>
