@@ -16,7 +16,7 @@
     "@sanity/vision": "^3.72.1",
     "@vidstack/react": "^1.12.12",
     "gsap": "^3.12.7",
-    "next": "15.1.6",
+    "next": "15.1.11",
     "next-sanity": "^9.8.47",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
