@@ -17,10 +17,9 @@ export default function PhotoGrid({
     );
   }
 
-  // Tableau contenant toutes les URLs dans l'ordre d'origine
-  const allImages = photography.images.map((image) =>
-    urlFor(image).width(800).quality(80).auto("format").url()
-  );
+  const allImages = photography.images
+    .filter((image) => image.asset?._ref)
+    .map((image) => urlFor(image).width(800).quality(80).auto("format").url());
 
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
