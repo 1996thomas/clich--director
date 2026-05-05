@@ -28,14 +28,6 @@ export default function Navbar() {
           <li>
             <Link href="/about">About</Link>
           </li>
-          <li>
-            <Link
-              target="_blank"
-              href="https://www.tiktok.com/@cliche.director?_t=ZN-8wtiuPnSWMo&_r=1"
-            >
-              Socials
-            </Link>
-          </li>
         </ul>
       </div>
     </nav>
